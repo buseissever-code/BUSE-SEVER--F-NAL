@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PAFTALAR</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- GİZLİ PAN KONTROLCÜSÜ -->
+    <div id="pan-controller"></div>
+
+    <!-- HAREKET EDEN ANA KATMAN -->
+    <div id="movable-layer">
+
+        <!-- SOL SAYFA (BOŞ KAPAK / BÜYÜK GÖRSEL ALANI) -->
+        <div class="book-container left-page-placeholder">
+            
+            <!-- 1. HİÇBİR ŞEYE TIKLANMAMIŞKEN GÖRÜNECEK YAZI -->
+            <div id="left-placeholder-text" style="
+                display: flex; 
+                flex-direction: column; 
+                align-items: center; 
+                justify-content: center; 
+                height: 100%; 
+                width: 100%;
+                color: #999; 
+                text-align: center;">
+                
+                <i class="fa-solid fa-arrow-right" style="font-size:24px; margin-bottom:10px;"></i>
+                <p>Detaylı incelemek için<br>sağdaki projelere tıklayınız.</p>
+            </div>
+
+            <!-- 2. BÜYÜK RESİM ÇERÇEVESİ (TEK BİR TANE) -->
+            <!-- Başlangıçta src BOŞ ve GİZLİ. JS burayı dolduracak. -->
+            <img id="big-preview-img" src="" alt="Önizleme" class="expanded-image" style="display: none;">
+
+        </div>
+
+        <!-- SAĞ SAYFA -->
+        <div class="book-container cv-wrapper">
+
+            <!-- SOL KOLON (Menü ve Açıklama) -->
+            <div class="left-column">
+                <div class="side-nav">
+                    <a href="index.html" class="side-link">Ana Sayfaya Dön</a>
+                    <a href="icindekiler.html" class="side-link">İçindekiler’e Dön</a>
+                </div>
+
+                <!-- JS ile dolacak açıklama kutusu -->
+                <div id="project-description-box" class="description-area">
+                    <!-- Burası tıklanınca dolacak -->
+                </div>
+
+                <div class="profile-image-container"></div>
+                <div class="contact-info"></div>
+            </div>
+
+            <!-- SAĞ KOLON (Paftalar Grid) -->
+            <div class="right-column">
+                <header class="main-header"></header>
+                
+                <!-- ID'yi 'grid-container' yaptık ki JS bulabilsin -->
+                <div class="pafta-grid" id="grid-container">
+                    
+                    <!-- 1. RESİM -->
+                    <div class="pafta-item">
+                        <img src="images/1.png" class="gallery-img" >
+                    </div>
+                    
+                    <!-- 2. RESİM -->
+                    <div class="pafta-item">
+                        <img src="images/2.png" class="gallery-img">
+                    </div>
+                    
+                    <!-- 3. RESİM -->
+                    <div class="pafta-item">
+                        <img src="images/3.png" class="gallery-img" >
+                    </div>
+                    
+                    <!-- 4. RESİM -->
+                    <div class="pafta-item">
+                        <img src="images/4.png" class="gallery-img">
+                    </div>
+
+                </div>
+
+                <div class="content-block"></div>
+                <div class="content-block"></div>
+                <div class="content-block"></div>
+                <div class="content-block"></div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- SAĞ / SOL GEÇİŞ ALANLARI -->
+    <a href="fçk.html" class="hotspot hotspot-next"></a>
+    <a href="cv.html" class="hotspot hotspot-prev"></a>
+
+    <!-- script.js dosyanı çağırıyoruz -->
+    <script src="script.js"></script>
+</body>
+</html>
