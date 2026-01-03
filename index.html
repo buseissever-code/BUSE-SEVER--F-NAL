@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buse İşsever - Mimarlık Portfolyosu</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Fontlar -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Roboto:wght@300;400&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- 1. GİZLİ PAN KONTROLCÜSÜ (Sürüklemeyi sağlayan alan) -->
+    <div id="pan-controller"></div>
+
+    <!-- 2. HAREKET EDEN KATMAN (Tasarım bunun içinde olmalı) -->
+    <div id="movable-layer">
+
+        <!-- ANA SAYFA KAPAK KONTEYNERİ -->
+        <!-- Bu ID'yi CSS'de özelleştirmiştik, aynen koruyoruz -->
+        <div class="book-container" id="home-cover-wrapper">
+            
+            <!-- Görseller -->
+            <img class="cover-item main-render" src="images/sol-ust.png" alt="Render">
+            <img class="cover-item tech-strip" src="images/sag-dikey.jpg" alt="Teknik Çizim">
+            <img class="cover-item presentation-photo" src="images/sol-alt.jpeg" alt="Sunum">
+
+            <!-- Döndürülmüş Model -->
+            <div class="cover-item rotated-photo">
+                <img src="images/sol-orta.jpg" alt="Model">
+            </div>
+            
+
+            <!-- ORTA BAŞLIK KUTUSU -->
+            <div class="grid-title-box">
+                <h1>Buse İşsever</h1>
+                <div class="line"></div>
+                <p>MİMARLIK ÖĞRENCİSİ</p>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- 3. SAĞ ALT KÖŞE (İLERİ GİT) - NEON IŞIKLI -->
+    <a href="icindekiler.html" class="hotspot hotspot-next"></a>
+
+    <!-- Script dosyası -->
+    <script src="script.js"></script>
+</body>
+</html>

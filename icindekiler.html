@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>İçindekiler</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="pan-controller"></div>
+
+<div id="movable-layer">
+
+    <!-- SOL SAYFA -->
+    <div class="book-container left-page-placeholder"></div>
+
+    <!-- SAĞ SAYFA -->
+    <div class="book-container cv-wrapper">
+        <div class="page right-page">
+
+            <div class="header-box">
+                <h2>İÇİNDEKİLER</h2>
+            </div>
+
+            <!-- GRID -->
+            <div class="contents-grid">
+
+                <div class="grid-item" onclick="toggleProject(this)">
+                    <img src="images/fçk2.jpeg">
+                    <div class="overlay">
+                        <h3>Fiziksel Çevre Kontrolü 2</h3>
+                        <p>Desen Atölyesi</p>
+                         <span class="go-project">  <a href="fçk.html">Projeye Git</a>
+                         </span>
+                    </div>
+                </div>
+
+                <div class="grid-item" onclick="toggleProject(this)">
+                    <img src="images/tugla(1).jpeg">
+                    <div class="overlay">
+                        <h3>Toprak Yapı Malzemesi</h3>
+                        <p>Tuğla ile Heykel Atölyesi</p>
+                         <span class="go-project">  <a href="toprak.html">Projeye Git</a>
+                         </span>
+                    </div>
+                </div>
+
+                <div class="grid-item" onclick="toggleProject(this)">
+                    <img src="images/tatil-koyu.png">
+                    <div class="overlay">
+                        <h3>Mimari Proje 2</h3>
+                        <p>Tatil Köyü</p>
+                         <span class="go-project">  <a href="tatil-koyu.html">Projeye Git</a>
+                         </span>
+                    </div>
+                </div>
+
+                <div class="grid-item" onclick="toggleProject(this)">
+                    <img src="images/up.png">
+                    <div class="overlay">
+                        <h3>Uygulama Projesi</h3>
+                        <p>Mimar Evi</p>
+                         <span class="go-project">  <a href="up.html">Projeye Git</a>
+                         </span>
+                    </div>
+                </div>
+
+                <div class="grid-item" onclick="toggleProject(this)">
+                    <img src="images/sol-orta.jpg">
+                    <div class="overlay">
+                        <h3>Teslim Paftaları</h3>
+                         <span class="go-project">  <a href="pafta.html">Projeye Git</a>
+                         </span>
+                    </div>
+                </div>
+
+                <div class="grid-item" onclick="toggleProject(this)">
+                    <img src="images/seramik.png">
+                    <div class="overlay">
+                        <h3>Mekan Organizasyonu</h3>
+                        <p>Seramik Atölyesi</p>
+                         <span class="go-project">  <a href="mekan.html">Projeye Git</a>
+                         </span>
+                    </div>
+                </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="pan-fade top"></div>
+<div class="pan-fade bottom"></div>
+<div class="pan-fade left"></div>
+<div class="pan-fade right"></div>
+<div class="hotspot hotspot-next" data-target="icindekiler.html"></div>
+    <a href="cv.html" class="hotspot hotspot-next"></a>
+    <a href="index.html" class="hotspot hotspot-prev"></a>
+<script src="script.js"></script>
+  <script>
+        function toggleProject(element) {
+            // Diğer tüm açık projeleri kapat
+            document.querySelectorAll('.grid-item').forEach(item => {
+                if (item !== element) {
+                    item.classList.remove('active');
+                }
+            });
+            // Tıklanana active sınıfını ekle/çıkar
+            element.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>
+
