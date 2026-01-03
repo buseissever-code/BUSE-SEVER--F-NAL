@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BUSE İŞSEVER</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- GİZLİ PAN KONTROLCÜSÜ (Sağ Alt Köşe) -->
+    <div id="pan-controller" title="Sayfayı buradan tutarak sürükleyebilirsiniz"></div>
+
+    <!-- HAREKET EDEN DÜNYA -->
+    <div id="movable-layer">
+        
+        <!-- 1. SOL KONTEYNIR (Boş/Kapak) -->
+        <div class="book-container left-page-placeholder">
+            <div class="placeholder-text">
+            </div>
+        </div>
+        
+
+        <!-- 2. SAĞ KONTEYNIR (CV - Önceki Tasarım) -->
+        <div class="book-container cv-wrapper">
+            
+            <!-- CV İÇERİĞİ BAŞLANGICI -->
+            <div class="left-column">
+                <div class="side-nav">
+
+    <a href="index.html" class="side-link">
+        ← Ana Sayfaya Dön
+    </a>
+
+    <a href="icindekiler.html" class="side-link">
+        ← İçindekiler’e Dön
+    </a>
+
+</div>
+                <div class="profile-image-container">
+                    <!-- Fotoğrafı buraya koyacaksın -->
+                    <img src="images/cv.png" alt="Buse İşsever" class="profile-img" onerror="this.src='https://placehold.co/400x500?text=Fotoğraf';">
+                </div>
+
+                <div class="section-title-box"><h2>İLETİŞİM</h2></div>
+                <div class="contact-info">
+                    <div class="contact-item"><i class="fa-solid fa-phone"></i><span>0544 799 7374</span></div>
+                    <div class="contact-item clickable-email" onclick="copyEmail(this)">
+    <i class="fa-solid fa-envelope"></i>
+    <span id="email-text">buseisseverr@gmail.com</span>
+    <!-- Gizli uyarı mesajı -->
+    <span class="copy-feedback">Kopyalandı!</span>
+</div>
+                    <div class="contact-item"><i class="fa-solid fa-location-dot"></i><span>Eyüpsultan/ İstanbul</span></div>
+                </div>
+
+                <div class="section-title-box"><h2>HAKKIMDA</h2></div>
+                <div class="about-text">
+                    <p>2022 yılından beri Mimar Sinan Güzel Sanatlar Üniversitesi’nde Mimarlık öğrencisiyim.</p>
+                    <p>Benim için mimarlık, sadece sonuca ulaşmak değil; süreci farklı yönleriyle yöneterek, sıkılmadan ve keyifle tasarlamaktır. Disiplinli, hızlı öğrenen, ekolojiye duyarlı ve yeni bilgilere daima açık biriyim.</p>
+                    <p>Tasarım sürecine verdiğim önem kadar, mimarlığın teknik boyutunun da büyük bir değer taşıdığını bilerek hareket ederim. 2 boyutlu ve 3 boyutlu çizimlerde deneyimliyim.</p>
+                </div>
+            </div>
+
+            <div class="right-column">
+                <header class="main-header">
+                    <h1>BUSE İŞSEVER</h1>
+                    <h3>MİMARLIK ÖĞRENCİSİ</h3>
+                </header>
+
+                <div class="section-header">EĞİTİM</div>
+                <div class="content-block">
+                    <p class="date">2022 -</p>
+                    <p class="institution">Mimar Sinan Güzel Sanatlar Üniversitesi</p>
+                    <p class="department">Mimarlık Fakültesi/ Lisans</p>
+                </div>
+
+                <div class="section-header">BECERİLER</div>
+                <div class="content-block">
+                    <ul class="skills-list">
+                        <li>AutoCad</li>
+                        <li>Sketchup</li>
+                        <li>Lumion</li>
+                        <li>Enscape</li>
+                        <li>Adobe PhotoShop</li>
+                        <li>Revit</li>
+                    </ul>
+                </div>
+
+                <div class="section-header">DENEYİM</div>
+                <div class="content-block">
+                    <div class="job">
+                        <h4>Stajyer Mimar</h4>
+                        <p class="company">Özyer Mimarlık | 2023</p>
+                        <ul class="job-details">
+                            <li>AutoCad</li>
+                            <li>Sketchup</li>
+                        </ul>
+                    </div>
+                    <div class="job mt-20">
+                        <h4>Stajyer Mimar</h4>
+                        <p class="company">Ağaçhanlı Mimarlık | 2025</p>
+                        <ul class="job-details">
+                            <li>AutoCad</li>
+                            <li>Sketchup</li>
+                            <li>Enscape</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="section-header">REFERANSLAR</div>
+                <div class="content-block references">
+                    <div class="ref-item">
+                        <h4>Zerin Türeli</h4>
+                        <p>Ağaçhanlı Mimarlık - 0 554 678 24 56</p>
+                    </div>
+                    <div class="ref-item mt-20">
+                        <h4>Dilan Ağaçhanlı</h4>
+                        <p>Ağaçhanlı Mimarlık - 0 536 286 56 23</p>
+                    </div>
+                </div>
+            </div>
+            <!-- CV İÇERİĞİ BİTİŞİ -->
+
+        </div>
+    </div>
+    <div class="hotspot hotspot-prev"> icindekiler.html </div>
+<div class="hotspot hotspot-next"></div>
+   <a href="pafta.html" class="hotspot hotspot-next"></a>
+     <a href="icindekiler.html" class="hotspot hotspot-prev"></a>
+    <script src="script.js"></script>
+</body>
+</html>

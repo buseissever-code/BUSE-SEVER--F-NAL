@@ -1,0 +1,1409 @@
+/* --- 1. Adım: Ana Sayfa Konteynerini Oluşturma --- */
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  background: hsl(0, 0%, 94%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  
+}
+/* --- 2. Adım: Kitap Alanını Ayarlama --- */
+.book-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin-top: 2%;
+    margin-bottom: 0%;
+    /* YENİ EKLENEN ORANLAR */
+    width:60%;  /* İçinde bulunduğu alanın genişliğinin %'ini kaplasın */
+     box-shadow: 40px 12px 25px 5px rgba(80, 79, 79, 0.2);
+      transform-style: preserve-3d; /* 3D animasyon için gerekli */
+    transition: transform 1.5s; /* Animasyon süresi */
+        display: flex;
+
+}
+
+/* --- 3. Adım: Sayfaların Oranını ve Boyutunu Garantileme --- */
+.portfolio-page {
+    background-color: #ffffff;
+    
+    /* SAYFANIN ORANINI KORU */
+    aspect-ratio: 210 / 297; /* A4 kağıt oranı. Bu en önemli kural! */
+    
+    /* SAYFANIN GENİŞLİĞİ: Esnek ol, konteynerin yarısını kapla */
+    width: 100%; /* Flexbox bu değeri kullanarak boyutları ayarlayacak */
+
+    /* SAYFANIN AŞIRI BÜYÜMESİNİ ENGELLE: Ekran yüksekliğini geçmesin */
+    max-height: 94vh; 
+    
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+/* --- GÖRSEL VE METİN POZİSYONLARI (Hiçbir değişiklik gerekmiyor, yüzdelik olduğu için çalışacak) --- */
+
+.layout-image {
+    position: absolute;
+    object-fit: cover;
+}
+.technical-drawing { top: 0%; bottom:4%; height: 90%; right:0;  z-index: 1; }
+.building-render { top: 0%; left: 4%; width: 75%; height: 45%;  z-index: 2; }
+.wireframe-model { bottom:10%; right: 20%; width: 25%; height: 30%;  z-index: 5; }
+.presentation-photo { bottom:10%; left: 4%; width: 50%; height: 40%; z-index: 4; }
+.title-block {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    height: 250px;
+    background-color: white;
+    padding: 10%;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    z-index: 8;
+     box-shadow: 20px 12px 25px 5px rgba(0, 0, 0, 0.2);
+}
+.title-block h1 {
+    margin: 0%;
+    font-size: clamp(60px, 3.5vw, 42px); /* Yazı boyutu da esnek */
+    color: #4b4b4b;
+    font-weight: 100;
+    bottom: 0px;
+}
+.title-block p {
+    margin: 0;
+    font-size: clamp(10px, 1vw, 12px); /* Yazı boyutu da esnek */
+    color: #333;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.right-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #aaa;
+    padding: 20px;
+    text-align: center;
+}
+#book {
+  position: relative;
+}
+
+/* sağ alt hotspot */
+#book::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 140px;
+  height: 140px;
+  cursor: grab;
+}
+#book {
+  position: relative;
+}
+
+/* görünmez ama etkileşimli alan */
+#hotspot-next {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 140px;
+  height: 140px;
+
+  background: transparent; /* görünmez */
+  cursor: grab;             /* PAN */
+  z-index: 50;
+}
+
+#hotspot-next:active {
+  cursor: grabbing;
+}
+/* GENEL SIFIRLAMA VE SAHNE */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+
+/* HAREKET EDEN KATMAN */
+#movable-layer {
+    display: flex; /* Yan yana dizilim */
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 50px; /* Başlangıç pozisyonu */
+    bottom: 50px;
+    left: 50px;
+    right: 50px;
+    gap: 0; /* Sayfalar arası boşluk yok (Kitap gibi) */
+    transform-origin: center center;
+    transition: transform 0.1s linear; /* Yumuşaklık ayarı */
+    /* Kullanıcı seçim yapabilsin ama sürüklerken sorun çıkmasın */
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+
+/* KİTAP KONTEYNIR GENEL YAPISI */
+.book-container {
+    width: 21cm; /* A4 Genişlik */
+    height: 29.7cm; /* A4 Yükseklik */
+    background-color: white;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    flex-shrink: 0; /* Küçülmeyi engelle */
+    overflow: hidden;
+}
+
+/* --- SOL SAYFA (BOŞ) TASARIMI --- */
+.left-page-placeholder {
+    background-color: #f8f8f8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-right: 1px solid #ddd; /* Kitap ortası çizgisi */
+}
+
+.placeholder-text {
+    text-align: center;
+    color: #aaa;
+}
+
+/* --- SAĞ SAYFA (CV) TASARIMI --- */
+/* CV konteynırı içindeki flex yapısı */
+.cv-wrapper {
+    display: flex;
+}
+
+/* Sol Sütun (%35) */
+.left-column {
+    width: 35%;
+    background-color: #f2f0eb;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Konteynırın tamamını kapla */
+}
+
+/* Sağ Sütun (%65) */
+.right-column {
+    width: 65%;
+    background-color: #fff;
+    padding: 40px 30px;
+    height: 100%;
+}
+
+/* CV İÇERİK STİLLERİ (Önceki kodlardan uyarlandı) */
+.profile-image-container {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.profile-img {
+    width: 100%;
+    height: auto;
+    filter: grayscale(100%);
+    display: block;
+}
+
+.section-title-box {
+    background-color: #e6e1db;
+    padding: 5px;
+    margin: 10px 0;
+}
+
+.section-title-box h2 {
+    font-size: 1rem;
+    font-weight: 800;
+}
+
+.contact-item {
+    font-size: 0.8rem;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+}
+.contact-item i { margin-right: 8px; width: 15px;}
+
+.about-text p {
+    font-size: 0.8rem;
+    text-align: justify;
+    margin-bottom: 8px;
+    line-height: 1.3;
+}
+
+.main-header h1 { font-size: 2rem; margin-bottom: 5px; }
+.main-header h3 { font-size: 1.2rem; font-weight: 400; color: #555; margin-bottom: 20px;}
+
+.section-header {
+    background-color: #f2f0eb;
+    padding: 5px;
+    font-weight: bold;
+    font-size: 1rem;
+    margin: 20px 0 10px 0;
+}
+
+.content-block { font-size: 0.9rem; }
+.date { font-weight: bold; text-decoration: underline; }
+.job h4, .ref-item h4 { font-weight: bold; text-decoration: underline; }
+.mt-20 { margin-top: 15px; }
+
+ul.skills-list, ul.job-details { padding-left: 20px; margin-top: 5px;}
+ul li { margin-bottom: 3px; }
+
+/* --- GİZLİ PAN KONTROLCÜSÜ --- */
+#pan-controller {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: 100px; /* Sağ alttaki aktif alanın genişliği */
+    height: 100px; /* Sağ alttaki aktif alanın yüksekliği */
+    background-color: rgba(255, 0, 0, 0.0); /* Tamamen şeffaf (test için 0.2 yapabilirsin) */
+    z-index: 9999; /* En üstte durmalı */
+    cursor: move; /* Mouse üzerine gelince taşıma ikonu çıkar */
+}
+/* --- MAIL KOPYALAMA İŞLEMİ (GÜNCEL) --- */
+
+/* Mail Kapsayıcısı */
+.clickable-email {
+    cursor: pointer;          /* El işareti çıkar */
+    position: relative;       /* "Kopyalandı" yazısını buna hizalar */
+    display: inline-flex;     /* İçerikleri yan yana dizer */
+    align-items: center;      /* Dikey ortalama */
+    transition: color 0.3s;
+}
+
+.clickable-email:hover {
+    color: #555;              /* Üzerine gelince renk değişimi */
+}
+
+/* "Kopyalandı!" Baloncuğu */
+.copy-feedback {
+    /* BAŞLANGIÇTA GİZLEME AYARLARI */
+    opacity: 0;               /* Tamamen şeffaf */
+    visibility: hidden;       /* Görünmez */
+    
+    /* GÖRÜNÜM AYARLARI */
+    background-color: #333;   /* Koyu arka plan */
+    color: #fff;              /* Beyaz yazı */
+    font-size: 0.75rem;       /* Küçük yazı boyutu */
+    padding: 4px 8px;         /* İç boşluk */
+    border-radius: 4px;       /* Kenar yuvarlama */
+    
+    /* KONUM AYARLARI */
+    position: absolute;       /* Bağımsız konumlandırma */
+    left: 100%;               /* Mailin bittiği yerin sağına */
+    margin-left: 10px;        /* Biraz boşluk bırak */
+    white-space: nowrap;      /* Alt satıra geçmesin */
+    z-index: 100;             /* En üstte görünsün */
+    
+    /* EFEKT AYARI */
+    transition: opacity 0.3s ease, visibility 0.3s; 
+}
+
+/* JavaScript bu sınıfı eklediğinde görünür olacak */
+.copy-feedback.show {
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+/* --- MAIL KOPYALAMA İŞLEMİ (GÜNCEL) --- */
+
+/* Mail Kapsayıcısı */
+.clickable-email {
+    cursor: pointer;          /* El işareti çıkar */
+    position: relative;       /* "Kopyalandı" yazısını buna hizalar */
+    display: inline-flex;     /* İçerikleri yan yana dizer */
+    align-items: center;      /* Dikey ortalama */
+    transition: color 0.3s;
+}
+
+.clickable-email:hover {
+    color: #555;              /* Üzerine gelince renk değişimi */
+}
+
+/* "Kopyalandı!" Baloncuğu */
+.copy-feedback {
+    /* BAŞLANGIÇTA GİZLEME AYARLARI */
+    opacity: 0;               /* Tamamen şeffaf */
+    visibility: hidden;       /* Görünmez */
+    
+    /* GÖRÜNÜM AYARLARI */
+    background-color: #333;   /* Koyu arka plan */
+    color: #fff;              /* Beyaz yazı */
+    font-size: 0.75rem;       /* Küçük yazı boyutu */
+    padding: 4px 8px;         /* İç boşluk */
+    border-radius: 4px;       /* Kenar yuvarlama */
+    
+    /* KONUM AYARLARI */
+    position: absolute;       /* Bağımsız konumlandırma */
+    left: 100%;               /* Mailin bittiği yerin sağına */
+    margin-left: 10px;        /* Biraz boşluk bırak */
+    white-space: nowrap;      /* Alt satıra geçmesin */
+    z-index: 100;             /* En üstte görünsün */
+    
+    /* EFEKT AYARI */
+    transition: opacity 0.3s ease, visibility 0.3s; 
+}
+
+/* JavaScript bu sınıfı eklediğinde görünür olacak */
+.copy-feedback.show {
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden; /* scroll'u tamamen kapatır */
+}
+#movable-layer {
+    position: absolute;
+    inset: 5%; /* üst-alt-sağ-sol % boşluk */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2%;
+}
+.book-container {
+    height: 100%;
+    width: 48%;
+    background: #f6f6f6;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+    border-radius: 6px;
+    overflow: hidden;
+}
+@media (max-width: 900px) {
+    #movable-layer {
+        flex-direction: column;
+        inset: 0%;
+        margin-bottom: 10%;
+        height: 100vh;
+    }
+.contents-grid {
+    min-height: 700vh;
+}
+    .book-container {
+        width: 100%;
+        height: 48%;
+    }
+}
+.left-column,
+.right-column {
+    height: 100%;
+    box-sizing: border-box;
+}
+.hotspot {
+    position: fixed;
+    width: 120px;
+    height: 120px;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    mix-blend-mode: screen; 
+    z-index: 9999;
+    cursor: grab;
+}
+
+/* SAĞ ALT */
+.hotspot-next {
+     background: radial-gradient(
+        circle at bottom right, 
+        rgba(200, 100, 255, 0.9) 10%,   /* Merkezdeki parlak lila */
+        rgba(160, 30, 255, 0.4) 40%,   /* Yayılan morluk */
+        transparent 70%                /* Bitiş (Şeffaf) */
+    );
+    right: 0;
+    bottom: 0;
+}
+
+/* SOL ALT */
+.hotspot-prev {
+    background: radial-gradient(
+        circle at bottom right, 
+        rgba(200, 100, 255, 0.9) 10%,   /* Merkezdeki parlak lila */
+        rgba(160, 30, 255, 0.4) 40%,   /* Yayılan morluk */
+        transparent 70%                /* Bitiş (Şeffaf) */
+    );
+    left: 0;
+    bottom: 0;
+}
+/* Ana Arka Plan ve Düzen */
+.book-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 20px; /* İki sayfa arasındaki boşluk */
+    padding: 50px;
+    background-color: #e6e6e6; /* Görseldeki genel gri arka plan */
+    min-height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Sayfa Standartları (Hem sağ hem sol için) */
+.page {
+    background-color: #f7f7f7; /* Sayfa rengi (hafif kırık beyaz) */
+    width: 45%; /* Sayfa genişliği */
+    max-width: 600px;
+    min-height: 700px; /* Sayfa yüksekliği */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15); /* Sayfa gölgesi */
+    padding: 40px;
+    position: relative;
+}
+
+/* SAĞ SAYFA ÖZEL AYARLAR */
+.header-box {
+    display: inline-block;
+    background-color: #e0e0e0; /* Başlık arkasındaki gri kutu */
+    padding: 5px 15px;
+    margin-bottom: 10px;
+    top: 10px;
+}
+
+.header-box h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: #000;
+}
+
+/* Liste Elemanları */
+.content-list {
+    display: flex;
+    flex-direction: column;
+    gap: 60px; /* İki madde arasındaki dikey boşluk */
+}
+
+.item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* Resim ve Metin Kutusu Ayarları */
+.img-box img {
+    width: 120px; /* Resim boyutu */
+    height: auto;
+    display: block;
+}
+
+.text-box p {
+    margin-top: 0;
+    font-weight: 100;
+    font-size: 10px;
+    line-height: 1;
+}
+
+/* --- Zikzak Düzeni İçin Özel Konumlandırmalar --- */
+
+/* 1. Satır: Normal akış (Sola yaslı) */
+.item-row-1 {
+    justify-content: flex-start;
+}
+
+/* 2. Satır: Sağa yaslı ve metin solda, resim sağda */
+.item-row-2 {
+    justify-content: flex-end; /* Tüm bloğu sağa iter */
+    text-align: right; /* Metni sağa yaslar */
+}
+.item-row-3 {
+    justify-content: flex-start; /* Tüm bloğu sağa iter */
+    text-align: right; /* Metni sağa yaslar */
+}
+/* Responsive: Mobilde alt alta gelmeleri için */
+@media (max-width: 768px) {
+    .book-wrapper {
+        flex-direction: column;
+        align-items: center;
+    }
+    .page {
+        width: 90%;
+        min-height: auto;
+    }
+}
+.page {
+    background-color: #f7f7f7; /* Sayfanın kendi rengi */
+    flex: 1;
+    min-height: 800px;
+    
+    /* İçeriğin kenarlara yapışmaması için boşluk veriyoruz */
+    padding: 50px; 
+    
+    /* İçeriğin yukarıdan başlaması için (flex ayarları varsa) */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Yukarı yasla */
+    align-items: stretch; /* Genişliğe yay */
+}
+
+/* İçindekiler listesini biraz sınırlamak istersen opsiyonel */
+.content-list {
+    margin-top: 20px;
+    /* Eğer çok yayılmasın istiyorsan max-width verebilirsin ama şart değil */
+}
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: #eaeaea;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#movable-layer {
+    display: flex;
+}
+/* SAYFALAR */
+.book-container {
+    width: 50%;
+    background: #fff;
+}
+
+.right-page {
+    padding: 60px;
+}
+
+/* BAŞLIK */
+.header-box {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.header-box h2 {
+    font-size: 14px;
+    letter-spacing: 4px;
+}
+
+/* GRID */
+.contents-grid {
+    width: 100%;
+    height: 70vh;
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: repeat(4, 25%);
+    gap: 20px;
+}
+
+/* HÜCRE */
+.grid-item {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+/* GÖRSEL */
+.grid-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: filter 0.4s ease;
+}
+
+/* OVERLAY */
+.overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,0.85);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.overlay h3 {
+    font-size: 12px;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+}
+
+.overlay p {
+    font-size: 10px;
+    letter-spacing: 1px;
+}
+
+/* AKTİF */
+.grid-item.active img {
+    filter: blur(6px);
+}
+
+.grid-item.active .overlay {
+    opacity: 1;
+}
+.grid-item {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.grid-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: filter 0.4s ease;
+}
+
+/* Overlay */
+.overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,0.35);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Yazı alanı */
+.overlay-text {
+    text-align: center;
+    color: #000;
+    font-family: sans-serif;
+}
+
+.overlay-text h3 {
+    font-size: 18px;
+    margin-bottom: 6px;
+}
+
+.overlay-text p {
+    font-size: 13px;
+    margin-bottom: 14px;
+    opacity: 0.8;
+}
+
+/* Projeye Git */
+.go-project {
+    font-size: 14px;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+/* TIKLANINCA AKTİF */
+.grid-item.active img {
+    filter: blur(6px);
+}
+
+.grid-item.active .overlay {
+    opacity: 1;
+}
+.contents-grid {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    gap: 20px;
+}
+
+.grid-item {
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.grid-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: filter 0.4s ease;
+}
+
+/* Overlay */
+.overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,0.4);
+    opacity: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.4s ease;
+    color: #000;
+}
+
+/* Yazılar */
+.overlay-text {
+    text-align: center;
+    color: #000;
+}
+
+.overlay-text h3 {
+    margin-bottom: 6px;
+    font-size: 18px;
+}
+
+.overlay-text p {
+    font-size: 13px;
+    margin-bottom: 12px;
+    color: #000;
+}
+
+.go-project {
+    font-size: 14px;
+    text-decoration: underline;
+}
+
+/* AKTİF OLUNCA */
+.grid-item.active img {
+    filter: blur(6px);
+}
+
+.grid-item.active .overlay {
+    opacity: 1;
+}
+.go-project a {
+    color: black;
+    text-decoration: underline;
+}
+.side-column {
+    position: relative;
+}
+
+.side-nav {
+    position: absolute;
+    top: 40px;
+    left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.side-link {
+    font-size: 13px;
+    color: #444;
+    text-decoration: none;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+}
+
+.side-link:hover {
+    text-decoration: underline;
+    transform: translateX(4px);
+}
+.paftalar
+{
+   width: 1%;
+}
+.pan-fade {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+}
+
+/* ALT */
+.pan-fade.bottom {
+    top: auto;
+    height: 140px;
+    background: linear-gradient(
+        to top,
+        rgba(200,200,200,0.45),
+        rgba(200,200,200,0)
+    );
+    backdrop-filter: blur(8px);
+}
+
+/* ÜST */
+.pan-fade.top {
+    bottom: auto;
+    height: 140px;
+    background: linear-gradient(
+        to bottom,
+        rgba(200,200,200,0.45),
+        rgba(200,200,200,0)
+    );
+    backdrop-filter: blur(8px);
+}
+
+/* SOL */
+.pan-fade.left {
+    right: auto;
+    width: 140px;
+    background: linear-gradient(
+        to right,
+        rgba(200,200,200,0.45),
+        rgba(200,200,200,0)
+    );
+    backdrop-filter: blur(8px);
+}
+
+/* SAĞ */
+.pan-fade.right {
+    left: auto;
+    width: 140px;
+    background: linear-gradient(
+        to left,
+        rgba(110, 109, 109, 0.527),
+        rgba(110, 109, 109, 0.541)
+    );
+    backdrop-filter: blur(8px);
+}
+.pafta-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);   /* 2 sütun */
+    grid-template-rows: repeat(3, auto);     /* 3 satır */
+    gap: 25px;                               /* satır & sütun arası */
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+}
+.pafta-item {
+    width: 100%;    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent   /* pafta arkası */
+}
+.pafta-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;   /* BOZULMAZ */
+}
+/* === SOL SAYFA MIRROR === */
+.mirror-page {
+    display: flex;
+    flex-direction: row-reverse; /* 🔥 AYNALAMA */
+}
+
+/* Bej kolon (sağda) */
+.mirror-column {
+    width: 18%;
+    background-color: #f2efe9; /* mevcut bej */
+    padding: 40px 20px;
+}
+
+/* İçerik alanı (solda) */
+.mirror-content {
+    width: 82%;
+    padding: 60px;
+}
+
+/* Pafta grid aynen korunur */
+.mirror-content .pafta-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+}
+
+/* Görseller */
+.mirror-content .pafta-item img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+/* TIKLANAN GÖRSEL */
+.zoomed {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(2);
+    z-index: 9999;
+    cursor: zoom-out;
+}
+/* --- YENİ EKLENEN ÖZELLİKLER --- */
+
+/* 1. Sol Sayfa Büyük Resim Ayarı */
+.left-page-placeholder {
+    position: relative;
+    padding: 0 !important; /* Varsa padding'i sıfırla */
+    overflow: hidden;
+    background-color: #fff; /* Beyaz arka plan */
+}
+
+#preview-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Resmi bozmadan sığdır */
+    display: block;
+    animation: fadeIn 0.5s ease; /* Açılma efekti */
+}
+
+/* 2. Metin Alanı (Linklerin Altı) */
+.description-area {
+    margin-top: 40px; /* Linklerden biraz aşağıda */
+    font-size: 13px;
+    color: #444;
+    line-height: 1.5;
+    text-align: left;
+    font-family: 'Segoe UI', sans-serif;
+    opacity: 0; /* Başlangıçta görünmez */
+    transition: opacity 0.5s ease;
+}
+.description-area.visible {
+    opacity: 1; /* Dolunca görünür */
+}
+
+/* 3. Grid Etkileşimleri (Blur Efekti) */
+
+/* Grid aktifleştiğinde (birine tıklanınca) hepsi silikleşsin */
+.pafta-grid.interaction-mode .pafta-item img {
+    filter: blur(4px) grayscale(50%);
+    opacity: 0.6;
+    transition: all 0.4s ease;
+    transform: scale(1);
+}
+
+/* TIKLANAN resim net kalsın ve biraz büyüsün */
+.pafta-grid.interaction-mode .pafta-item.active-item img {
+    filter: blur(0) grayscale(0%);
+    opacity: 1;
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    z-index: 10;
+    position: relative;
+}
+
+/* Grid elemanlarına tıklama işareti */
+.pafta-item {
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+/* Basit açılma animasyonu */
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.98); }
+    to { opacity: 1; transform: scale(1); }
+}
+/* --- GİZLİ PAN KONTROLCÜSÜ --- */
+#pan-controller {
+    /* ... diğer özellikler ... */
+    z-index: 2; /* Mevcut 9999'dan daha düşük bir değer yap */
+    cursor: grab; /* Pan işlemini belirtmek için */
+}
+
+/* SAĞ / SOL GEÇİŞ ALANLARI */
+.hotspot {
+     /* HER ŞEYİN EN ÜSTÜNE ÇIKAR (Kritik nokta burası) */
+    z-index: 99999 !important; 
+    
+    /* Mouse ile üzerine gelince el işareti çıksın */
+    cursor: pointer !important;
+
+    position: fixed;
+    width: 120px;
+    height: 120px;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    mix-blend-mode: screen; 
+    z-index: 9999;
+    cursor: grab;
+    /* ... diğer özellikler ... */
+    opacity: 0; /* Normalde görünmez olsun */
+    z-index: 10; /* Mevcut 9999'dan daha düşük bir değer yap */
+}
+/* --- YENİ Z-INDEX AYARLARI --- */
+
+/* Sağ sütunun kendisi için bir yığınlama bağlamı oluşturun */
+.right-column {
+    position: relative; /* z-index'in çalışması için */
+    z-index: 100; /* pan-controller'dan yüksek */
+    /* ... Mevcut diğer stil özellikleriniz ... */
+}
+
+/* Pafta ızgarası ve içindeki elemanlar için daha yüksek z-index */
+.pafta-grid {
+    position: relative; /* z-index'in çalışması için */
+    z-index: 101; /* right-column'dan yüksek, böylece tıklandığında ön planda kalır */
+    /* ... Mevcut diğer stil özellikleriniz ... */
+}
+
+.pafta-item {
+    cursor: pointer; /* Tıklanabilir olduğunu görsel olarak belirtin */
+    position: relative; /* z-index'in çalışması için */
+    z-index: 102; /* Pafta grid içindeki her bir resmin üzerine tıklanabilmesi için */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Hover ve aktif durum için geçiş */
+}
+
+/* Hover efekti (isteğe bağlı) */
+.pafta-item:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+/* Sol sayfadaki büyük önizleme resmi de ön planda olmalı */
+.left-page-placeholder {
+    position: relative;
+    z-index: 100; /* Sağ sütun ile aynı veya biraz farklı olabilir */
+    /* ... Mevcut diğer stil özellikleriniz ... */
+}
+
+#preview-image {
+    /* ... Mevcut stil özellikleriniz ... */
+    z-index: 101; /* Büyük resim açıklamanın üzerinde olabilir */
+}
+
+/* Açıklama metni kutusu */
+.description-area {
+    position: relative;
+    z-index: 102; /* Metin kutusu da ön planda olmalı */
+    /* ... Mevcut diğer stil özellikleriniz ... */
+}
+
+/* Pafta-grid üzerindeki etkileşim modunda aktif öğenin z-index'i (önceki kodda vardı) */
+.pafta-grid.interaction-mode .pafta-item.active-item img {
+    filter: blur(0) grayscale(0%);
+    opacity: 1;
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    z-index: 105; /* Aktif olanın en üstte olmasını sağlar */
+    position: relative;
+}
+/* --- SOL SAYFA BÜYÜK RESİM AYARLARI --- */
+
+/* Sol konteynerin ayarları */
+.left-page-placeholder {
+    position: relative;
+    overflow: hidden; /* Dışarı taşarsa gizle */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #fff;
+}
+
+/* Büyük resmin stili (Başlangıçta görünmez) */
+.expanded-image {
+    display: none; /* Başlangıçta gizli */
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Resmi bozmadan sığdır */
+    cursor: zoom-out; /* Üzerine gelince kapatma işareti çıksın */
+    animation: slideIn 0.5s ease; /* Kayarak gelme efekti */
+}
+
+/* Resim açılırken çalışacak animasyon */
+@keyframes slideIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+/* --- SAĞ TARAF ETKİLEŞİMİ --- */
+
+/* Birine tıklanınca diğerleri blur olsun */
+.pafta-grid.has-active-item .pafta-item {
+    filter: blur(5px); /* Bulanıklık miktarı */
+    opacity: 0.5;
+    transition: all 0.4s ease;
+    pointer-events: none; /* Diğerlerine tıklamayı engelle */
+}
+
+/* Sadece aktif olan (tıklanan) net kalsın */
+.pafta-grid.has-active-item .pafta-item.active {
+    filter: blur(0);
+    opacity: 1;
+    pointer-events: auto; /* Buna tekrar tıklanabilsin (kapatmak için) */
+    box-shadow: 0 0 0 4px #444; /* Seçili olduğunu belli eden çerçeve */
+    transform: scale(1.02); /* Hafifçe vurgula */
+}
+/* JS 'display: block' yaptığında kesin görünsün diye */
+#big-preview-img[style*="display: block"] {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain;
+    z-index: 999; /* En üste çıkar */
+}
+/* --- EN ALTA EKLE --- */
+
+/* Grid aktif olduğunda (birine tıklanmışsa) */
+.pafta-grid.has-active-item .pafta-item {
+    filter: blur(5px);
+    opacity: 0.5;
+    transition: all 0.4s ease;
+    pointer-events: none; /* Diğerlerine tıklanamasın */
+}
+
+/* Sadece TIKLANAN (active) net kalsın */
+.pafta-grid.has-active-item .pafta-item.active {
+    filter: blur(0);
+    opacity: 1;
+    pointer-events: auto; /* Kapatmak için tıklanabilsin */
+    box-shadow: 0 0 0 3px #555; /* Seçili olduğunu belli eden çerçeve */
+    transform: scale(1.02);
+    z-index: 105;
+}
+
+/* Sol büyük resim ayarı */
+.expanded-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+/* --- EN ALTA EKLE --- */
+
+/* Grid aktif olduğunda (birine tıklanmışsa) */
+.pafta-grid.has-active-item .pafta-item {
+    filter: blur(5px);
+    opacity: 0.5;
+    transition: all 0.4s ease;
+    pointer-events: none; /* Diğerlerine tıklanamasın */
+}
+
+/* Sadece TIKLANAN (active) net kalsın */
+.pafta-grid.has-active-item .pafta-item.active {
+    filter: blur(0);
+    opacity: 1;
+    pointer-events: auto; /* Kapatmak için tıklanabilsin */
+    box-shadow: 0 0 0 3px #555; /* Seçili olduğunu belli eden çerçeve */
+    transform: scale(1.02);
+    z-index: 105;
+}
+
+/* Sol büyük resim ayarı */
+.expanded-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+/* --- KESİN ÇÖZÜM İÇİN HOTSPOT AYARLARI --- */
+
+.hotspot {
+    /* 1. Konum ve Boyut (Bunlar olmazsa görünmez) */
+    position: fixed; 
+    bottom: 0;
+    width: 200px !important;  /* Genişlik şart! */
+    height: 200px !important; /* Yükseklik şart! */
+    display: block;           /* Link olduğu için block yapmalıyız */
+    
+    /* 2. Katman Sırası (En üstte olsun) */
+    z-index: 999999 !important; 
+    cursor: pointer;
+
+    /* 3. Görünürlük Efekti */
+    opacity: 0; /* Normalde gizli */
+    transition: opacity 0.5s ease;
+}
+
+/* Mouse ile üzerine gelince GÖRÜNÜR YAP */
+.hotspot:hover {
+    opacity: 1 !important;
+}
+
+/* --- SAĞ ALT KÖŞE (İLERİ) --- */
+.hotspot-next {
+    right: 0;
+    /* Neon Lila Radyal Işık */
+    background: radial-gradient(
+        circle at 100% 100%, /* Tam sağ alt köşeden başla */
+        rgba(180, 50, 255, 0.8) 50%, 
+        rgba(150, 0, 255, 0.4) 40%, 
+        transparent 70%
+    );
+}
+
+/* --- SOL ALT KÖŞE (GERİ) --- */
+.hotspot-prev {
+    left: 0;
+    /* Neon Lila Radyal Işık */
+    background: radial-gradient(
+        circle at 0% 100%, /* Tam sol alt köşeden başla */
+        rgba(180, 50, 255, 0.8) 50%, 
+        rgba(150, 0, 255, 0.4) 40%, 
+        transparent 70%
+    );
+}
+/* === ANA SAYFA KAPAK TASARIMI (YENİ) === */
+
+/* Sadece ana sayfadaki kutuyu özelleştiriyoruz */
+#home-cover-wrapper {
+    position: relative;
+    background: #fff; /* Temiz beyaz zemin */
+    width: 90vh;      /* Kareye yakın, ekran yüksekliğine orantılı */
+    height: 85vh;
+    max-width: 1000px;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.2); /* Derinlik gölgesi */
+    overflow: hidden; /* Dışarı taşan resimleri kes */
+    border-radius: 4px;
+}
+
+/* Tüm kapak resimleri için ortak ayar */
+.cover-item {
+    position: absolute;
+    object-fit: cover;
+    z-index: 1;
+}
+
+/* 1. Büyük Render (Sol Üst) */
+.main-render {
+    top: 0;
+    left: 0;
+    width: 70%;
+    height: 45%;
+}
+
+/* 2. Dikey Teknik Çizim (Sağ Taraf) */
+.tech-strip {
+    top: 0;
+    right: 5%; /* Biraz içeride */
+    width: 20%;
+    height: 100%;
+    object-fit: contain; /* Çizim bozulmasın */
+    opacity: 0.85;
+}
+
+/* 3. Sunum Fotoğrafı (Sol Alt) */
+.presentation-photo {
+    bottom: 0%;
+    left: 0%;
+    width: 50%;
+    height: 50%;
+}
+
+/* 4. Döndürülmüş Model Fotoğrafı (Polaroid Tarzı) */
+.rotated-photo {
+    bottom: 15%;
+    right: 20%; /* Teknik çizimin soluna denk gelsin */
+    width: 30%;
+    height: auto;
+    z-index: 5; /* Diğer resimlerin üstüne çıksın */
+    background: #fff;
+    padding: 10px; /* Beyaz çerçeve */
+    box-shadow: 5px 10px 20px rgba(0,0,0,0.25); /* Resim gölgesi */
+    
+    /* DÖNDÜRME İŞLEMİ */
+    transform: rotate(-8deg); 
+    transition: transform 0.4s ease;
+}
+
+.rotated-photo img {
+    width: 100%;
+    display: block;
+}
+
+/* Mouse gelince düzelsin (Efekt) */
+.rotated-photo:hover {
+    transform: rotate(0deg) scale(1.1);
+    z-index: 20;
+}
+
+/* 5. ORTA BAŞLIK KUTUSU (NOKTA GRID DESENİ) */
+.grid-title-box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10; /* En üstte */
+    
+    background-color: #fff; /* Zemin beyaz */
+    padding: 50px 70px;
+    text-align: center;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+    min-width: 300px;
+
+    /* === AUTOCAD NOKTA DESENİ === */
+    /* Gri noktalar, 20px aralıklarla */
+    background-image: radial-gradient(#999 1.5px, transparent 1.5px);
+    background-size: 20px 20px;
+}
+
+/* İsim Stili */
+.grid-title-box h1 {
+    font-family: 'Times New Roman', serif; /* Teknik/Klasik font */
+    font-size: 3.5rem;
+    color: #222;
+    margin: 0;
+    line-height: 1;
+    letter-spacing: -1px;
+}
+
+/* Ayırıcı Çizgi */
+.grid-title-box .line {
+    width: 60px;
+    height: 3px;
+    background-color: #333;
+    margin: 20px auto;
+}
+
+/* Alt Yazı */
+.grid-title-box p {
+    font-family: sans-serif;
+    font-size: 0.9rem;
+    letter-spacing: 5px; /* Geniş harf aralığı */
+    color: #555;
+    margin: 0;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+/* Mobilde Düzenleme */
+@media (max-width: 768px) {
+    #home-cover-wrapper {
+        width: 95%;
+        height: 80vh;
+    }
+    .grid-title-box {
+        padding: 30px;
+        min-width: 80%;
+    }
+    .grid-title-box h1 { font-size: 2.5rem; }
+    .tech-strip { opacity: 0.3; } /* Mobilde arkada kalsın */
+    .rotated-photo { right: 5%; bottom: 5%; }
+}
+/* --- KATMAN SIRALAMASI GARANTİSİ --- */
+
+/* Hareket eden katman */
+#movable-layer {
+    z-index: 10;
+}
+
+/* Sürükleme alanı (Tasarımın üstünde olmalı ki tutabilelim) */
+#pan-controller {
+    z-index: 20 !important;
+}
+
+/* Neon Butonlar (HER ŞEYİN ÜSTÜNDE OLMALI) */
+.hotspot {
+    z-index: 99999 !important; /* Kesinlikle en üstte */
+}
+/* --- DİĞER RESİMLER İÇİN HOVER EFEKTİ (DÖNMEDEN ÖNE GELME) --- */
+
+/* 1. Tüm kapak görsellerine yumuşak geçiş ekle (Zaten varsa sorun yok) */
+.cover-item {
+    transition: all 0.4s ease; /* Büyüme ve öne gelme yumuşak olsun */
+}
+
+/* 2. Düz duran 3 resim için özel hover kuralı */
+/* (Not: .rotated-photo sınıfını buraya dahil etmedik çünkü o dönerek geliyor) */
+.main-render:hover,
+.tech-strip:hover,
+.presentation-photo:hover {
+    
+    /* EN ÜSTE ÇIKARTMA */
+    z-index: 999 !important; /* Başlık kutusunun ve diğerlerinin üstüne çık */
+    
+    /* HAFİF BÜYÜTME (Döndürme yok) */
+    transform: scale(1.08); 
+    
+    /* ÖNE ÇIKMA HİSSİ İÇİN GÖLGE */
+    box-shadow: 0 20px 40px rgba(0,0,0,0.35);
+    
+    /* Kenarları biraz daha belirgin olsun */
+    filter: brightness(1.05);
+}

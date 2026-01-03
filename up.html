@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UYGULAMA PROJESİ</title>
+
+    <!-- Stil dosyan aynen kullanılacak -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- GİZLİ PAN KONTROLCÜSÜ -->
+    <div id="pan-controller"></div>
+
+    <!-- HAREKET EDEN ANA KATMAN -->
+    <div id="movable-layer">
+
+        <!-- SOL SAYFA (BOŞ KAPAK) -->
+        <div class="book-container left-page-placeholder">
+            <!-- bilerek boş -->
+        </div>
+
+        <!-- SAĞ SAYFA (BOŞ İÇ SAYFA / CV / PROJE vs.) -->
+        <div class="book-container cv-wrapper">
+
+            <!-- SOL KOLON (BOŞ) -->
+            <div class="left-column">
+                <div class="side-nav">
+
+    <a href="index.html" class="side-link">
+         Ana Sayfaya Dön
+    </a>
+
+    <a href="icindekiler.html" class="side-link">
+        İçindekiler’e Dön
+    </a>
+
+</div>
+
+                <div class="profile-image-container"></div>
+
+                <div class="contact-info"></div>
+
+            </div>
+
+            <!-- SAĞ KOLON (BOŞ) -->
+            <div class="right-column">
+                <header class="main-header"></header>
+
+                <div class="content-block"></div>
+
+                <div class="content-block"></div>
+
+                <div class="content-block"></div>
+
+                <div class="content-block"></div>
+            </div>
+
+        </div>
+    </div>
+    <!-- SAĞ / SOL GEÇİŞ ALANLARI -->
+    <div class="hotspot hotspot-prev"></div>
+    <div class="hotspot hotspot-next"></div>
+   <a href="mekan.html" class="hotspot hotspot-next"></a>
+     <a href="toprak.html" class="hotspot hotspot-prev"></a>
+    <!-- JS aynı kalacak -->
+    <script src="script.js"></script>
+</body>
+</html>
